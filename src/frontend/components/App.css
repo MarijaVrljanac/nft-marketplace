@@ -28,6 +28,10 @@
   color: #02345a;
 }
 
+.spinner-border, .my-0, h2 {
+  color: white;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
