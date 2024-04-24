@@ -6,8 +6,8 @@ import {
 import Navigation from './NavBar/NavBar.jsx';
 import Home from './Homepage/Homepage.jsx'
 import Create from './CreatePage/Create.jsx'
-import MyListedItems from './ListedItems/MyListedItems.jsx'
-import MyPurchases from './PurchasedItems/MyPurchases.jsx'
+import MyListedItems from './ListedItems/ListedItems.jsx'
+import MyPurchases from './PurchasedItems/Purchases.jsx'
 import MarketplaceAbi from '../contractsData/Marketplace.json'
 import MarketplaceAddress from '../contractsData/Marketplace-address.json'
 import NFTAbi from '../contractsData/NFT.json'

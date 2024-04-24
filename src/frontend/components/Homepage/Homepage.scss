@@ -22,6 +22,11 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    padding: 0;
+  }
+
+  .card-body {
+    color: white;
   }
   
   .gradient-button,
@@ -115,17 +120,6 @@ body {
       transform: translateZ(0);
   }
   
-  .card {
-    float: left;
-      transform: translateZ(0);
-  }
-  
-  .card img {
-    width: 200px;
-    height: 200px;
-    display: block;
-  }
-  
   .slider {
     position: relative;
     /* width: 100%;
@@ -147,10 +141,18 @@ body {
   
   .card {
     flex: 1;
-    margin: 10px;
-    background-color: #f5f5f5;
+    padding: 0.5rem;
+    background-color: black;
     border-radius: 5px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .card-footer {
+    border-top: 1px solid rgba(85, 84, 84, 0.155);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .slider-button {
@@ -177,6 +179,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .card-wrapper {
+    display: flex;
+    align-items: center;
   }
   
   

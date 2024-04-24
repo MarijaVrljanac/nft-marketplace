@@ -115,17 +115,6 @@ body {
       transform: translateZ(0);
   }
   
-  .card {
-    float: left;
-      transform: translateZ(0);
-  }
-  
-  .card img {
-    width: 200px;
-    height: 200px;
-    display: block;
-  }
-  
   .slider {
     position: relative;
     /* width: 100%;
@@ -143,14 +132,6 @@ body {
   .slider-wrapper {
     display: flex;
     width: calc(100% / 3);
-  }
-  
-  .card {
-    flex: 1;
-    margin: 10px;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
   }
   
   .slider-button {
