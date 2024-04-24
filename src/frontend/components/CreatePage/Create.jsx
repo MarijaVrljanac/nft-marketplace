@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
 import { Row, Form, Button } from 'react-bootstrap'
-import axios from 'axios'; // Import axios library
+import axios from 'axios'; 
 import './Create.scss';
 
 const Create = ({ marketplace, nft }) => {
@@ -24,7 +24,6 @@ const Create = ({ marketplace, nft }) => {
         }
       });
       console.log('Pinata response:', response.data);
-      setImage(response.data.IpfsHash);
       return response.data.IpfsHash; // Return the IPFS hash
     } catch (error) {
       console.error('Pinata upload error:', error);
@@ -32,41 +31,18 @@ const Create = ({ marketplace, nft }) => {
     }
   }
 
-  // const uploadToPinataJSON = async (file) => {
-  //   const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-
-  //   try {
-  //     const response = await axios.post(url, {
-  //       headers: {
-  //         'pinata_api_key': process.env.REACT_APP_PINATA_KEY,
-  //         'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET,
-  //       },
-  //       body: {
-  //         file
-  //       }
-  //     });
-  //     console.log('Pinata response:', response.data);
-  //     setImage(response.data.IpfsHash);
-  //     return response.data.IpfsHash; // Return the IPFS hash
-  //   } catch (error) {
-  //     console.error('Pinata upload error:', error);
-  //     throw error; // Rethrow the error to be caught elsewhere
-  //   }
-  // }
-
-  const uploadToPinataJSON = async (file) => {
+  const uploadToPinataJSON = async (data) => {
     const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
   
     try {
-      const response = await axios.post(url, file, {
+      const response = await axios.post(url, data, {
         headers: {
-          'Content-Type': 'application/json', // Set Content-Type header
+          'Content-Type': 'application/json', 
           'pinata_api_key': process.env.REACT_APP_PINATA_KEY,
           'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET
         }
       });
       console.log('Pinata response:', response.data);
-      setImage(response.data.IpfsHash);
       return response.data.IpfsHash; // Return the IPFS hash
     } catch (error) {
       console.error('Pinata upload error:', error);
@@ -89,25 +65,31 @@ const Create = ({ marketplace, nft }) => {
 
   const createNFT = async () => {
     if (!image || !price || !name || !description) return
-    try{
-      const result = await uploadToPinataJSON(JSON.stringify({image, price, name, description}));
-      mintThenList(result)
+    try {
+      const metadata = JSON.stringify({image, price, name, description});
+      const result = await uploadToPinataJSON(metadata);
+      await mintThenList(result);
     } catch(error) {
-      console.log("ipfs uri upload error: ", error)
+      console.log("Pinata upload error: ", error)
     }
   }
 
   const mintThenList = async (result) => {
-    const uri = `https://gateway.pinata.cloud/ipfs/${result}`;
-    // mint nft 
-    await(await nft.mint(uri)).wait()
-    // get tokenId of new nft 
-    const id = await nft.tokenCount()
-    // approve marketplace to spend nft
-    await(await nft.setApprovalForAll(marketplace.address, true)).wait()
-    // add nft to marketplace
-    const listingPrice = ethers.utils.parseEther(price.toString())
-    await(await marketplace.makeItem(nft.address, id, listingPrice)).wait()
+    try {
+      const uri = `https://gateway.pinata.cloud/ipfs/${result}`;
+      // mint nft 
+      await (await nft.mint(uri)).wait();
+      // get tokenId of new nft 
+      const id = await nft.tokenCount();
+      // approve marketplace to spend nft
+      await (await nft.setApprovalForAll(marketplace.address, true)).wait();
+      // add nft to marketplace
+      const listingPrice = ethers.utils.parseEther(price.toString());
+      await (await marketplace.makeItem(nft.address, id, listingPrice)).wait();
+    } catch (error) {
+      console.error('NFT minting error:', error);
+      throw error; // Rethrow the error to be caught elsewhere
+    }
   }
 
   return (
