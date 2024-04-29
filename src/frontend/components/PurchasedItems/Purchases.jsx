@@ -19,12 +19,12 @@ export default function MyPurchases({ marketplace, nft, account }) {
       const response = await fetch(uri)
       const metadata = await response.json()
       // get total price of item (item price + fee)
-      const totalPrice = await marketplace.getTotalPrice(i.itemId)
+      const totalPrice = await marketplace.getTotalPrice(i.itmId)
       // define listed item object
       let purchasedItem = {
         totalPrice,
         price: i.price,
-        itemId: i.itemId,
+        itemId: i.itmId,
         name: metadata.name,
         description: metadata.description,
         image: metadata.image
