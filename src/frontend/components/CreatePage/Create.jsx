@@ -1,14 +1,16 @@
-import { useState } from 'react'
-import { ethers } from "ethers"
-import { Row, Form, Button } from 'react-bootstrap'
+import { useState } from 'react';
+import { ethers } from "ethers";
+import { Row, Form, Button } from 'react-bootstrap';
 import axios from 'axios'; 
 import './Create.scss';
 
 const Create = ({ marketplace, nft }) => {
-  const [image, setImage] = useState('')
-  const [price, setPrice] = useState(null)
-  const [name, setName] = useState('')
-  const [description, setDescription] = useState('')
+  const [image, setImage] = useState('');
+  const [price, setPrice] = useState(null);
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [color, setColor] = useState('');
+  const [material, setMaterial] = useState('');
 
   const uploadToPinata = async (file) => {
     const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
@@ -29,7 +31,7 @@ const Create = ({ marketplace, nft }) => {
       console.error('Pinata upload error:', error);
       throw error; // Rethrow the error to be caught elsewhere
     }
-  }
+  };
 
   const uploadToPinataJSON = async (data) => {
     const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
@@ -48,7 +50,7 @@ const Create = ({ marketplace, nft }) => {
       console.error('Pinata upload error:', error);
       throw error; // Rethrow the error to be caught elsewhere
     }
-  }
+  };
 
   const uploadToIPFS = async (event) => {
     event.preventDefault();
@@ -61,18 +63,18 @@ const Create = ({ marketplace, nft }) => {
         console.log("Pinata upload error: ", error);
       }
     }
-  }
+  };
 
   const createNFT = async () => {
-    if (!image || !price || !name || !description) return
+    if (!image || !price || !name || !description) return;
     try {
-      const metadata = JSON.stringify({image, price, name, description});
+      const metadata = JSON.stringify({image, price, name, description, color, material});
       const result = await uploadToPinataJSON(metadata);
       await mintThenList(result);
     } catch(error) {
-      console.log("Pinata upload error: ", error)
+      console.log("Pinata upload error: ", error);
     }
-  }
+  };
 
   const mintThenList = async (result) => {
     try {
@@ -90,7 +92,7 @@ const Create = ({ marketplace, nft }) => {
       console.error('NFT minting error:', error);
       throw error; // Rethrow the error to be caught elsewhere
     }
-  }
+  };
 
   return (
     <div className="container-fluid mt-5">
@@ -106,6 +108,8 @@ const Create = ({ marketplace, nft }) => {
               />
               <Form.Control onChange={(e) => setName(e.target.value)} size="lg" required type="text" placeholder="Name" />
               <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Description" />
+              <Form.Control onChange={(e) => setColor(e.target.value)} size="lg" required as="textarea" placeholder="Color" />
+              <Form.Control onChange={(e) => setMaterial(e.target.value)} size="lg" required as="textarea" placeholder="Material" />
               <Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" required type="number" placeholder="Price in ETH" />
               <div className="d-grid px-0">
                 <Button onClick={createNFT} variant="primary" size="lg" className='gradient-button'>
@@ -118,6 +122,6 @@ const Create = ({ marketplace, nft }) => {
       </div>
     </div>
   );
-}
+};
 
 export default Create;

@@ -1,25 +1,27 @@
-import { useState, useEffect } from 'react'
-import { ethers } from "ethers"
-import { Row, Col, Card, Button } from 'react-bootstrap'
+import { useState, useEffect } from 'react';
+import { ethers } from "ethers";
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import './Homepage.scss';
 
 const Homepage = ({ marketplace, nft }) => {
-  const [loading, setLoading] = useState(true)
-  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState([]);
   const loadMarketplaceItems = async () => {
     // Load all unsold items
-    const itemCount = await marketplace.itemCount()
-    let items = []
+    const itemCount = await marketplace.itemCount();
+    let items = [];
     for (let i = 1; i <= itemCount; i++) {
-      const item = await marketplace.items(i)
+      const item = await marketplace.items(i);
       if (!item.sold) {
         // get uri url from nft contract
-        const uri = await nft.tokenURI(item.tokenId)
+        const uri = await nft.tokenURI(item.tokenId);
         // use uri to fetch the nft metadata stored on ipfs 
-        const response = await fetch(uri)
-        const metadata = await response.json()
+        const response = await fetch(uri);
+        const metadata = await response.json();
+console.log(metadata);
+
         // get total price of item (item price + fee)
-        const totalPrice = await marketplace.getTotalPrice(item.itemId)
+        const totalPrice = await marketplace.getTotalPrice(item.itemId);
         // Add item to items array
         items.push({
           totalPrice,
@@ -27,27 +29,29 @@ const Homepage = ({ marketplace, nft }) => {
           seller: item.seller,
           name: metadata.name,
           description: metadata.description,
-          image: metadata.image
-        })
+          image: metadata.image,
+          color: metadata.color,
+          material: metadata.material
+        });
       }
     }
-    setLoading(false)
-    setItems(items)
-  }
+    setLoading(false);
+    setItems(items);
+  };
 
   const buyMarketItem = async (item) => {
-    await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
-    loadMarketplaceItems()
-  }
+    await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait();
+    loadMarketplaceItems();
+  };
 
   useEffect(() => {
-    loadMarketplaceItems()
-  }, [])
+    loadMarketplaceItems();
+  }, []);
   if (loading) return (
     <main style={{ padding: "1rem 0" }}>
       <h2>Loading...</h2>
     </main>
-  )
+  );
   return (
     <div className="flex justify-center">
       {items.length > 0 ?
@@ -61,6 +65,12 @@ const Homepage = ({ marketplace, nft }) => {
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>
                       {item.description}
+                    </Card.Text>
+                    <Card.Text>
+                      {item.color}
+                    </Card.Text>
+                    <Card.Text>
+                      {item.material}
                     </Card.Text>
                   </Card.Body>
                   <Card.Footer>
@@ -82,5 +92,5 @@ const Homepage = ({ marketplace, nft }) => {
         )}
     </div>
   );
-}
+};
 export default Homepage;
