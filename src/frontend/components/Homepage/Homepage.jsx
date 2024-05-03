@@ -89,7 +89,7 @@ const Homepage = ({ marketplace, nft }) => {
                         size="lg"
                         className="gradient-button"
                       >
-                        Buy for {ethers.utils.formatEther(item.totalPrice)} ETH
+                        {ethers.utils.formatEther(item.totalPrice)} ETH
                       </Button>
                     </div>
                   </Card.Footer>
