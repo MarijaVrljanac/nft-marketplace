@@ -5,7 +5,9 @@ import { Row, Col, Card } from 'react-bootstrap'
 function renderSoldItems(items) {
   return (
     <>
-      <h2>Sold</h2>
+      <br></br>
+      <h4>Sold NFTs</h4>
+      <br></br>
       <Row xs={1} md={2} lg={4} className="g-4 py-3">
         {items.map((item, idx) => (
           <Col key={idx} className="overflow-hidden">
@@ -71,7 +73,8 @@ export default function ListedItems({ marketplace, nft, account }) {
     <div className="flex justify-center">
       {listedItems.length > 0 ?
         <div className="px-5 py-3 container">
-            <h2>Listed</h2>
+            <h4>Listed NFTs</h4>
+            <br></br>
           <Row xs={1} md={2} lg={4} className="g-4 py-3">
             {listedItems.map((item, idx) => (
               <Col key={idx} className="overflow-hidden">

@@ -81,7 +81,7 @@ body {
     align-items: center;
   }
   
-  .logo-cluster h3, h3 {
+  .logo-cluster h3, h3, h4 {
     margin-bottom: 0;
     color: white;
   }
@@ -169,6 +169,16 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .modal-dialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-content {
+    min-width: 500px;
   }
   
   

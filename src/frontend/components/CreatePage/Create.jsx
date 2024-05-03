@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; 
 import { ethers } from "ethers";
-import { Row, Form, Button } from 'react-bootstrap';
+import { Row, Form, Button, Modal } from 'react-bootstrap';
 import axios from 'axios'; 
 import './Create.scss';
 
@@ -11,6 +12,8 @@ const Create = ({ marketplace, nft }) => {
   const [description, setDescription] = useState('');
   const [color, setColor] = useState('');
   const [material, setMaterial] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const uploadToPinata = async (file) => {
     const url = 'https://api.pinata.cloud/pinning/pinFileToIPFS';
@@ -71,6 +74,7 @@ const Create = ({ marketplace, nft }) => {
       const metadata = JSON.stringify({image, price, name, description, color, material});
       const result = await uploadToPinataJSON(metadata);
       await mintThenList(result);
+      setShowSuccess(true);
     } catch(error) {
       console.log("Pinata upload error: ", error);
     }
@@ -94,6 +98,8 @@ const Create = ({ marketplace, nft }) => {
     }
   };
 
+  const handleClose = () => setShowSuccess(false);
+
   return (
     <div className="container-fluid mt-5">
       <div className="row">
@@ -113,13 +119,24 @@ const Create = ({ marketplace, nft }) => {
               <Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" required type="number" placeholder="Price in ETH" />
               <div className="d-grid px-0">
                 <Button onClick={createNFT} variant="primary" size="lg" className='gradient-button'>
-                  Create & List NFT!
+                  Mint and List
                 </Button>
               </div>
             </Row>
           </div>
         </main>
       </div>
+      <Modal show={showSuccess} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Success!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Your NFT has been created and listed successfully.</Modal.Body>
+        <Modal.Footer>
+        <Button variant="secondary" onClick={() => { handleClose(); navigate('/'); }}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };
